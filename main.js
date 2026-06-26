@@ -1,18 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     let currentProfileData = null;
+    let activePlatform = 'instagram';
+    
     const searchForm = document.getElementById('search-form');
     const handleInput = document.getElementById('handle-input');
     const searchBtn = document.getElementById('search-btn');
     const btnText = searchBtn.querySelector('.btn-text');
     const btnLoader = searchBtn.querySelector('.btn-loader');
     
-    // Adjust Stats Elements
-    const adjustStatsBtn = document.getElementById('adjust-stats-btn');
-    const adjustStatsPanel = document.getElementById('adjust-stats-panel');
-    const adjFollowersInput = document.getElementById('adj-followers');
-    const adjFollowingInput = document.getElementById('adj-following');
-    const adjCancelBtn = document.getElementById('adj-cancel-btn');
-    const adjSaveBtn = document.getElementById('adj-save-btn');
+
     
     const errorContainer = document.getElementById('error-container');
     const dashboard = document.getElementById('dashboard');
@@ -24,11 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileTopics = document.getElementById('profile-topics');
     const profileLink = document.getElementById('profile-link');
     const profileSource = document.getElementById('profile-source');
+    const inputPrefixIcon = document.getElementById('input-prefix-icon');
     
     // Stats Elements
     const statFollowers = document.getElementById('stat-followers');
-    const statReach = document.getElementById('stat-reach');
-    const statScore = document.getElementById('stat-score');
     const statER = document.getElementById('stat-er');
     const erContext = document.getElementById('er-context');
     
@@ -42,17 +37,87 @@ document.addEventListener('DOMContentLoaded', () => {
     // API Base URL (FastAPI)
     const API_BASE = 'http://localhost:8000/api';
 
+    const platformPlaceholders = {
+        instagram: 'Enter Instagram handle or profile link (e.g. nasa, instagram.com/nasa)',
+        youtube: 'Enter YouTube channel handle or link (e.g. @mkbhd, youtube.com/@mkbhd)',
+        twitter: 'Enter X/Twitter handle or link (e.g. @elonmusk, x.com/elonmusk)'
+    };
 
+    // Custom Dropdown Selector Helpers
+    function selectPlatform(platform) {
+        activePlatform = platform;
+        
+        const option = document.querySelector(`.select-dropdown-option[data-value="${platform}"]`);
+        if (option) {
+            document.querySelectorAll('.select-dropdown-option').forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+            
+            const svgIcon = option.querySelector('svg').outerHTML;
+            const text = option.querySelector('span').textContent;
+            
+            document.getElementById('trigger-icon').innerHTML = svgIcon;
+            document.getElementById('trigger-text').textContent = text;
+        }
+        
+        handleInput.placeholder = platformPlaceholders[activePlatform];
+        updatePrefixIcon();
+    }
 
-    // Preset Suggestions Buttons
-    const tagBtns = document.querySelectorAll('.tag-btn');
-    tagBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const handle = btn.getAttribute('data-handle');
-            handleInput.value = handle;
-            triggerSearch(handle);
+    const selectWrapper = document.getElementById('custom-select-wrapper');
+    const selectTrigger = document.getElementById('select-trigger');
+    
+    selectTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectWrapper.classList.toggle('open');
+    });
+    
+    document.addEventListener('click', () => {
+        selectWrapper.classList.remove('open');
+    });
+
+    document.querySelectorAll('.select-dropdown-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const val = option.getAttribute('data-value');
+            selectPlatform(val);
+            selectWrapper.classList.remove('open');
         });
     });
+
+    // Auto-detect platform from URLs
+    handleInput.addEventListener('input', () => {
+        const val = handleInput.value.trim().toLowerCase();
+        let detectedPlatform = null;
+        
+        if (val.includes('instagram.com')) detectedPlatform = 'instagram';
+        else if (val.includes('youtube.com') || val.includes('youtu.be')) detectedPlatform = 'youtube';
+        else if (val.includes('twitter.com') || val.includes('x.com')) detectedPlatform = 'twitter';
+        
+        if (detectedPlatform && detectedPlatform !== activePlatform) {
+            selectPlatform(detectedPlatform);
+        }
+        updatePrefixIcon();
+    });
+
+    function updatePrefixIcon() {
+        const val = handleInput.value.trim();
+        if (val.startsWith('http://') || val.startsWith('https://') || val.includes('.com') || val.includes('.be')) {
+            inputPrefixIcon.style.display = 'none';
+            handleInput.style.paddingLeft = '1.25rem';
+        } else {
+            inputPrefixIcon.style.display = 'block';
+            handleInput.style.paddingLeft = '2.5rem';
+            
+            if (activePlatform === 'youtube' || activePlatform === 'twitter') {
+                inputPrefixIcon.textContent = '@';
+            } else {
+                inputPrefixIcon.textContent = '@';
+            }
+        }
+    }
+
+
+
 
     // Form Submission
     searchForm.addEventListener('submit', (e) => {
@@ -87,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showLoading();
         
         try {
-            const res = await fetch(`${API_BASE}/analyze/${encodeURIComponent(handle)}`);
+            const res = await fetch(`${API_BASE}/analyze/${encodeURIComponent(handle)}?platform=${activePlatform}`);
             if (!res.ok) {
                 const errData = await res.json();
                 throw new Error(errData.detail || 'Failed to fetch profile analysis.');
@@ -113,18 +178,98 @@ document.addEventListener('DOMContentLoaded', () => {
         return num.toString();
     }
 
+    const platformNames = {
+        instagram: 'Instagram',
+        youtube: 'YouTube',
+        twitter: 'Twitter'
+    };
+
+    const platformConfigs = {
+        instagram: {
+            mediaCardTitle: '📷 Post Metrics (Images)',
+            mediaAvgLikes: 'Avg. Likes',
+            mediaAvgComments: 'Avg. Comments',
+            mediaERLabel: 'Engagement Rate',
+            videoCardTitle: '🎥 Reel Metrics (Videos)',
+            videoAvgLikes: 'Avg. Likes',
+            videoAvgComments: 'Avg. Comments',
+            videoAvgViews: 'Avg. Views',
+            videoRatio: 'Views to Followers',
+            videoERLabel: 'Engagement Rate',
+            mainERLabel: 'Engagement Rate',
+            followersLabel: 'Followers'
+        },
+        youtube: {
+            mediaCardTitle: '🎥 Video Metrics',
+            mediaAvgLikes: 'Avg. Views',
+            mediaAvgComments: 'Avg. Comments',
+            mediaERLabel: 'Views/Subs Ratio',
+            videoCardTitle: '🩳 Shorts Metrics',
+            videoAvgLikes: 'Avg. Views',
+            videoAvgComments: 'Avg. Comments',
+            videoAvgViews: 'Avg. Views',
+            videoRatio: 'Views to Subscribers',
+            videoERLabel: 'Views/Subs Ratio',
+            mainERLabel: 'Views/Subs Ratio',
+            followersLabel: 'Subscribers'
+        },
+        twitter: {
+            mediaCardTitle: '🐦 Tweets',
+            mediaAvgLikes: 'Avg. Likes',
+            mediaAvgComments: 'Avg. Replies',
+            mediaERLabel: 'Engagement Rate',
+            videoCardTitle: '🎥 Media Tweets',
+            videoAvgLikes: 'Avg. Likes',
+            videoAvgComments: 'Avg. Replies',
+            videoAvgViews: 'Avg. Views',
+            videoRatio: 'Impressions to Followers',
+            videoERLabel: 'Engagement Rate',
+            mainERLabel: 'Engagement Rate',
+            followersLabel: 'Followers'
+        }
+    };
+
     function renderDashboard(data) {
         currentProfileData = data;
         
         // Show Dashboard Container
         dashboard.classList.remove('hidden');
-        adjustStatsBtn.classList.remove('hidden');
+        
+        // Set dynamic theme styling class
+        dashboard.className = 'dashboard';
+        if (data.platform) {
+            dashboard.classList.add(`theme-${data.platform}`);
+        }
         
         // 1. Profile Header
+        const avatarContainer = document.getElementById('profile-avatar-container');
+        if (data.profile_pic_url) {
+            avatarContainer.innerHTML = `<img src="${data.profile_pic_url}" alt="${data.full_name}'s avatar">`;
+            avatarContainer.style.display = 'block';
+        } else {
+            avatarContainer.style.display = 'none';
+        }
+
         profileHandle.textContent = `@${data.handle}`;
         profileName.textContent = data.full_name;
         profileBio.textContent = data.biography;
-        profileLink.href = `https://instagram.com/${data.handle}`;
+        // Construct actual platform profile link
+        let profileUrl = '#';
+        if (data.platform === 'instagram') {
+            profileUrl = `https://www.instagram.com/${data.handle}/`;
+        } else if (data.platform === 'youtube') {
+            profileUrl = data.handle.startsWith('@') 
+                ? `https://www.youtube.com/${data.handle}` 
+                : `https://www.youtube.com/@${data.handle}`;
+        } else if (data.platform === 'twitter') {
+            profileUrl = `https://x.com/${data.handle}`;
+        }
+        profileLink.href = profileUrl;
+        
+        const visitBtnText = document.getElementById('visit-btn-text');
+        if (visitBtnText) {
+            visitBtnText.textContent = `Visit ${platformNames[data.platform] || 'Instagram'}`;
+        }
         
         if (data.is_simulated) {
             profileSource.textContent = 'Demo Mode (Mirror Offline)';
@@ -137,25 +282,69 @@ document.addEventListener('DOMContentLoaded', () => {
             profileSource.className = 'source-badge live';
         }
         
-        // Topics tags are removed as requested by user
         profileTopics.innerHTML = '';
 
-        // 2. Stats Cards
+        // 2. Platform specific text configurations
+        const config = platformConfigs[data.platform] || platformConfigs.instagram;
+        document.getElementById('media-card-title').textContent = config.mediaCardTitle;
+        document.getElementById('media-avg-likes-label').textContent = config.mediaAvgLikes;
+        document.getElementById('media-avg-comments-label').textContent = config.mediaAvgComments;
+        document.getElementById('media-er-label').textContent = config.mediaERLabel;
+
+        document.getElementById('video-card-title').textContent = config.videoCardTitle;
+        document.getElementById('video-avg-likes-label').textContent = config.videoAvgLikes;
+        document.getElementById('video-avg-comments-label').textContent = config.videoAvgComments;
+        document.getElementById('video-avg-views-label').textContent = config.videoAvgViews || 'Avg. Views';
+        document.getElementById('video-er-label').textContent = config.videoERLabel;
+        document.getElementById('video-ratio-label').textContent = config.videoRatio;
+        
+        document.getElementById('followers-stat-label').textContent = config.followersLabel;
+        document.getElementById('stat-er-label').textContent = config.mainERLabel;
+
+        // Toggle redundancy and views row visibility
+        const ratioRow = document.getElementById('video-ratio-row');
+        const mediaCommentsRow = document.getElementById('media-comments-row');
+        const videoCommentsRow = document.getElementById('video-comments-row');
+        const videoViewsRow = document.getElementById('video-views-row');
+        
+        if (data.platform === 'youtube') {
+            ratioRow.classList.add('hidden');
+            mediaCommentsRow.classList.add('hidden');
+            videoCommentsRow.classList.add('hidden');
+            videoViewsRow.classList.add('hidden');
+        } else if (data.platform === 'twitter') {
+            ratioRow.classList.remove('hidden');
+            mediaCommentsRow.classList.remove('hidden');
+            videoCommentsRow.classList.remove('hidden');
+            videoViewsRow.classList.add('hidden');
+        } else if (data.platform === 'instagram') {
+            ratioRow.classList.add('hidden');
+            mediaCommentsRow.classList.remove('hidden');
+            videoCommentsRow.classList.remove('hidden');
+            videoViewsRow.classList.add('hidden');
+        } else {
+            ratioRow.classList.remove('hidden');
+            mediaCommentsRow.classList.remove('hidden');
+            videoCommentsRow.classList.remove('hidden');
+            videoViewsRow.classList.remove('hidden');
+        }
+
+        // 3. Stats Cards
         statFollowers.textContent = data.followers > 0 ? formatNumber(data.followers) : 'N/A';
         statER.textContent = data.followers > 0 ? `${data.avg_engagement_rate}%` : 'N/A';
         
-
-        
         // Quality Contexts
         if (data.followers > 0) {
-            if (data.avg_engagement_rate > 4.0) {
-                erContext.textContent = 'High Engagement';
+            const highThreshold = data.platform === 'youtube' ? 15.0 : 4.0;
+            const avgThreshold = data.platform === 'youtube' ? 5.0 : 2.0;
+            if (data.avg_engagement_rate > highThreshold) {
+                erContext.textContent = data.platform === 'youtube' ? 'High View Velocity' : 'High Engagement';
                 erContext.className = 'stat-indicator positive';
-            } else if (data.avg_engagement_rate > 2.0) {
-                erContext.textContent = 'Average Engagement';
+            } else if (data.avg_engagement_rate > avgThreshold) {
+                erContext.textContent = data.platform === 'youtube' ? 'Average View Velocity' : 'Average Engagement';
                 erContext.className = 'stat-indicator neutral';
             } else {
-                erContext.textContent = 'Low Engagement';
+                erContext.textContent = data.platform === 'youtube' ? 'Low View Velocity' : 'Low Engagement';
                 erContext.className = 'stat-indicator warning';
             }
         } else {
@@ -163,142 +352,99 @@ document.addEventListener('DOMContentLoaded', () => {
             erContext.className = 'stat-indicator neutral';
         }
 
-        // 2.1 Detailed Metrics Bindings
-        document.getElementById('metric-post-likes').textContent = data.followers > 0 ? formatNumber(data.images_avg_likes) : 'N/A';
-        document.getElementById('metric-post-comments').textContent = data.followers > 0 ? formatNumber(data.images_avg_comments) : 'N/A';
+        // 3.1 Detailed Metrics Bindings
+        document.getElementById('metric-post-likes').textContent = data.images_avg_likes !== undefined ? formatNumber(data.images_avg_likes) : 'N/A';
+        document.getElementById('metric-post-comments').textContent = data.images_avg_comments !== undefined ? formatNumber(data.images_avg_comments) : 'N/A';
         document.getElementById('metric-post-er').textContent = data.followers > 0 ? `${data.images_er}%` : 'N/A';
         
-        document.getElementById('metric-reel-likes').textContent = data.followers > 0 ? formatNumber(data.reels_avg_likes) : 'N/A';
-        document.getElementById('metric-reel-comments').textContent = data.followers > 0 ? formatNumber(data.reels_avg_comments) : 'N/A';
+        document.getElementById('metric-reel-likes').textContent = data.reels_avg_likes !== undefined ? formatNumber(data.reels_avg_likes) : 'N/A';
+        document.getElementById('metric-reel-comments').textContent = data.reels_avg_comments !== undefined ? formatNumber(data.reels_avg_comments) : 'N/A';
+        document.getElementById('metric-reel-views').textContent = data.reels_avg_views !== undefined ? formatNumber(data.reels_avg_views) : 'N/A';
         document.getElementById('metric-reel-er').textContent = data.followers > 0 ? `${data.reels_er}%` : 'N/A';
         document.getElementById('metric-reel-views-ratio').textContent = data.followers > 0 ? `${data.reels_views_to_followers_ratio}%` : 'N/A';
+
+        // Hide cards if all their metrics are 0
+        const mediaCard = document.getElementById('media-card-title').closest('.metric-card');
+        const hasMediaMetrics = (parseFloat(data.images_avg_likes) > 0) || 
+                                (parseFloat(data.images_avg_comments) > 0) || 
+                                (parseFloat(data.images_er) > 0);
+        mediaCard.style.display = hasMediaMetrics ? 'block' : 'none';
+
+        const videoCard = document.getElementById('video-card-title').closest('.metric-card');
+        const hasVideoMetrics = (parseFloat(data.reels_avg_likes) > 0) || 
+                                (parseFloat(data.reels_avg_comments) > 0) || 
+                                (parseFloat(data.reels_er) > 0) ||
+                                (parseFloat(data.reels_avg_views) > 0);
+        videoCard.style.display = hasVideoMetrics ? 'block' : 'none';
         
-        document.getElementById('metric-likes-comments-ratio').textContent = data.followers > 0 ? data.likes_to_comments_ratio : 'N/A';
 
 
-
-
-        // 3. Render recent posts list
+        // 4. Render recent posts list contextually
         postsContainer.innerHTML = '';
-        data.recent_posts.slice(0, 10).forEach(post => {
+        if (!data.recent_posts || data.recent_posts.length === 0) {
             const item = document.createElement('div');
-            item.className = 'list-row glass';
-            
-            const badgeHtml = post.is_sponsored 
-                ? `<span class="post-badge sponsored">Sponsored</span>`
-                : '';
-            
-            item.innerHTML = `
-                <div class="row-type">
-                    ${post.media_type === 'video' ? '🎥 Reel' : '📷 Post'}
-                    ${badgeHtml}
-                </div>
-                <div class="row-metrics">
-                    ${post.views > 0 ? `
-                    <div class="row-metric">
-                        <span class="m-label">Views</span>
-                        <span class="m-value">${formatNumber(post.views)}</span>
-                    </div>
-                    ` : `
-                    <div class="row-metric">
-                        <span class="m-label">Likes</span>
-                        <span class="m-value">${formatNumber(post.likes)}</span>
-                    </div>
-                    `}
-                    <div class="row-metric">
-                        <span class="m-label">Comments</span>
-                        <span class="m-value">${formatNumber(post.comments)}</span>
-                    </div>
-                    <div class="row-metric highlight">
-                        <span class="m-label">ER</span>
-                        <span class="m-value">${post.views > 0 ? 'N/A' : (data.followers > 0 ? post.engagement_rate + '%' : 'N/A')}</span>
-                    </div>
-                </div>
-            `;
+            item.className = 'list-row glass no-posts-message';
+            item.style.padding = '24px';
+            item.style.justifyContent = 'center';
+            item.style.alignItems = 'center';
+            item.style.color = 'var(--text-secondary)';
+            item.style.fontSize = '0.95rem';
+            item.style.fontWeight = '500';
+            item.textContent = 'No recent posts retrieved for this public profile.';
             postsContainer.appendChild(item);
-        });
-
-
+        } else {
+            data.recent_posts.slice(0, 10).forEach(post => {
+                const item = document.createElement('div');
+                item.className = 'list-row glass';
+                
+                const badgeHtml = post.is_sponsored 
+                    ? `<span class="post-badge sponsored">Sponsored</span>`
+                    : '';
+                    
+                let rowTypeLabel = '';
+                if (data.platform === 'youtube') {
+                    rowTypeLabel = post.media_type === 'video' ? '🎥 Video' : '🩳 Short';
+                } else if (data.platform === 'twitter') {
+                    rowTypeLabel = post.media_type === 'video' ? '🎥 Video' : '🐦 Tweet';
+                } else {
+                    rowTypeLabel = post.media_type === 'video' ? '🎥 Reel' : '📷 Post';
+                }
+                
+                const likesLabel = 'Likes';
+                const commentsLabel = data.platform === 'twitter' ? 'Replies' : 'Comments';
+                
+                item.innerHTML = `
+                    <div class="row-type">
+                        ${rowTypeLabel}
+                        ${badgeHtml}
+                    </div>
+                    <div class="row-metrics">
+                        ${(data.platform !== 'youtube') ? `
+                        <div class="row-metric">
+                            <span class="m-label">${likesLabel}</span>
+                            <span class="m-value">${formatNumber(post.likes)}</span>
+                        </div>
+                        ` : ''}
+                        ${(post.views > 0 && data.platform !== 'instagram') ? `
+                        <div class="row-metric">
+                            <span class="m-label">Views</span>
+                            <span class="m-value">${formatNumber(post.views)}</span>
+                        </div>
+                        ` : ''}
+                        ${(data.platform === 'youtube') ? '' : `
+                        <div class="row-metric">
+                            <span class="m-label">${commentsLabel}</span>
+                            <span class="m-value">${formatNumber(post.comments)}</span>
+                        </div>
+                        `}
+                        <div class="row-metric highlight">
+                            <span class="m-label">ER</span>
+                            <span class="m-value">${data.followers > 0 ? post.engagement_rate + '%' : 'N/A'}</span>
+                        </div>
+                    </div>
+                `;
+                postsContainer.appendChild(item);
+            });
+        }
     }
-
-
-
-    // Overrides click logic
-    adjustStatsBtn.addEventListener('click', () => {
-        if (currentProfileData) {
-            adjFollowersInput.value = currentProfileData.followers;
-            adjFollowingInput.value = currentProfileData.following || 0;
-            adjustStatsPanel.classList.toggle('hidden');
-        }
-    });
-    
-    adjCancelBtn.addEventListener('click', () => {
-        adjustStatsPanel.classList.add('hidden');
-    });
-    
-    adjSaveBtn.addEventListener('click', () => {
-        if (!currentProfileData) return;
-        
-        const rawFollowers = adjFollowersInput.value.trim();
-        const rawFollowing = adjFollowingInput.value.trim();
-        
-        const newFollowers = parseInt(rawFollowers.replace(/,/g, ''), 10);
-        const newFollowing = parseInt(rawFollowing.replace(/,/g, ''), 10);
-        
-        if (isNaN(newFollowers) || newFollowers <= 0) {
-            alert('Please enter a valid positive number for Followers.');
-            return;
-        }
-        
-        currentProfileData.followers = newFollowers;
-        currentProfileData.following = isNaN(newFollowing) ? 0 : newFollowing;
-        
-        // Recalculate engagement rates
-        let totalER = 0;
-        currentProfileData.recent_posts.forEach(post => {
-            post.engagement_rate = parseFloat((((post.likes + post.comments) / newFollowers) * 100).toFixed(2));
-            totalER += post.engagement_rate;
-        });
-        
-        currentProfileData.avg_engagement_rate = parseFloat((totalER / Math.max(currentProfileData.recent_posts.length, 1)).toFixed(2));
-        
-        // Recalculate estimated reach
-        let reach = Math.round(newFollowers * (currentProfileData.avg_engagement_rate / 100) * 2.5);
-        reach = Math.min(reach, newFollowers);
-        reach = Math.max(reach, Math.round(newFollowers * 0.05));
-        currentProfileData.estimated_reach = reach;
-        
-        // Recalculate influence score
-        const score = Math.min(Math.max((newFollowers ** 0.15) * (currentProfileData.avg_engagement_rate ** 0.4), 1.0), 10.0);
-        currentProfileData.influence_score = parseFloat(score.toFixed(1));
-        
-        // Recalculate Images vs Reels stats
-        const imagesLikes = currentProfileData.recent_posts.filter(p => p.media_type === 'image').map(p => p.likes);
-        const imagesComments = currentProfileData.recent_posts.filter(p => p.media_type === 'image').map(p => p.comments);
-        const reelsLikes = currentProfileData.recent_posts.filter(p => p.media_type !== 'image').map(p => p.likes);
-        const reelsComments = currentProfileData.recent_posts.filter(p => p.media_type !== 'image').map(p => p.comments);
-        const reelsViews = currentProfileData.recent_posts.filter(p => p.media_type !== 'image' && p.views > 0).map(p => p.views);
-        
-        const imgAvgLikes = imagesLikes.length ? (imagesLikes.reduce((a,b) => a+b, 0) / imagesLikes.length) : 0;
-        const imgAvgComments = imagesComments.length ? (imagesComments.reduce((a,b) => a+b, 0) / imagesComments.length) : 0;
-        currentProfileData.images_avg_likes = parseFloat(imgAvgLikes.toFixed(1));
-        currentProfileData.images_avg_comments = parseFloat(imgAvgComments.toFixed(1));
-        currentProfileData.images_er = parseFloat((((imgAvgLikes + imgAvgComments) / newFollowers) * 100).toFixed(2));
-        
-        const reelsAvgLikes = reelsLikes.length ? (reelsLikes.reduce((a,b) => a+b, 0) / reelsLikes.length) : 0;
-        const reelsAvgComments = reelsComments.length ? (reelsComments.reduce((a,b) => a+b, 0) / reelsComments.length) : 0;
-        currentProfileData.reels_avg_likes = parseFloat(reelsAvgLikes.toFixed(1));
-        currentProfileData.reels_avg_comments = parseFloat(reelsAvgComments.toFixed(1));
-        currentProfileData.reels_er = parseFloat((((reelsAvgLikes + reelsAvgComments) / newFollowers) * 100).toFixed(2));
-
-        const reelsAvgViews = reelsViews.length ? (reelsViews.reduce((a,b) => a+b, 0) / reelsViews.length) : 0;
-        currentProfileData.reels_views_to_followers_ratio = parseFloat((((reelsAvgViews) / newFollowers) * 100).toFixed(2));
-
-        const totalLikes = currentProfileData.recent_posts.reduce((acc, p) => acc + p.likes, 0);
-        const totalComments = currentProfileData.recent_posts.reduce((acc, p) => acc + p.comments, 0);
-        currentProfileData.likes_to_comments_ratio = parseFloat((totalLikes / Math.max(totalComments, 1)).toFixed(2));
-        
-        renderDashboard(currentProfileData);
-        adjustStatsPanel.classList.add('hidden');
-    });
 });

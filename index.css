@@ -111,7 +111,7 @@ header {
     border-radius: 24px;
     padding: 2rem;
     width: 100%;
-    max-width: 700px;
+    max-width: 850px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     transition: var(--transition);
 }
@@ -131,6 +131,7 @@ header {
     flex-grow: 1;
     display: flex;
     align-items: center;
+    height: 3.5rem;
 }
 
 .input-prefix {
@@ -143,15 +144,17 @@ header {
 
 #handle-input {
     width: 100%;
+    height: 3.5rem;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 9999px;
-    padding: 1.25rem 1.25rem 1.25rem 2.5rem;
+    padding: 0 1.25rem 0 2.5rem;
     color: #fff;
     font-family: var(--font-sans);
     font-size: 1rem;
     font-weight: 500;
     transition: var(--transition);
+    box-sizing: border-box;
 }
 
 #handle-input:focus {
@@ -167,6 +170,7 @@ header {
     border: none;
     border-radius: 9999px;
     padding: 0 2rem;
+    height: 3.5rem;
     font-weight: 600;
     font-family: var(--font-sans);
     font-size: 1rem;
@@ -177,6 +181,7 @@ header {
     justify-content: center;
     position: relative;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 #search-btn:hover {
@@ -296,6 +301,13 @@ header {
     font-weight: bold;
     font-size: 1rem;
     border: 3px solid var(--bg-dark);
+}
+
+.profile-details-wrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
 }
 
 .profile-meta {
@@ -858,6 +870,142 @@ header {
 .m-detail-row.accent-row .m-detail-value {
     color: var(--accent);
     text-shadow: 0 0 8px rgba(236, 72, 153, 0.15);
+}
+
+/* Custom Dropdown Selector */
+.select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    height: 3.5rem;
+    width: 165px;
+}
+
+.select-trigger {
+    width: 100%;
+    height: 3.5rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    padding: 0 2.5rem 0 1.25rem;
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+.select-trigger:hover, .select-wrapper.open .select-trigger {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.select-trigger-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.select-trigger-text {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.select-wrapper::after {
+    content: "▼";
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    position: absolute;
+    right: 1.25rem;
+    pointer-events: none;
+    transition: transform var(--transition);
+}
+
+.select-wrapper.open::after {
+    transform: rotate(180deg);
+}
+
+.select-dropdown-options {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    background: #0f0d47;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    gap: 0.25rem;
+    box-sizing: border-box;
+}
+
+.select-wrapper.open .select-dropdown-options {
+    display: flex;
+}
+
+.select-dropdown-option {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.select-dropdown-option:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.select-dropdown-option.selected {
+    background: rgba(210, 245, 67, 0.15);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+#handle-input::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* Dynamic Themes */
+.theme-instagram {
+    --primary: #D2F543;
+    --primary-glow: rgba(210, 245, 67, 0.2);
+    --accent: #ec4899;
+}
+
+.theme-facebook {
+    --primary: #1877F2;
+    --primary-glow: rgba(24, 119, 242, 0.2);
+    --accent: #3b5998;
+}
+
+.theme-youtube {
+    --primary: #FF0000;
+    --primary-glow: rgba(255, 0, 0, 0.2);
+    --accent: #ff4e4e;
+}
+
+.theme-twitter {
+    --primary: #e7e9ea;
+    --primary-glow: rgba(231, 233, 234, 0.2);
+    --accent: #1d9bf0;
 }
 
 

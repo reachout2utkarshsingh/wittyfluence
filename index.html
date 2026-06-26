@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wittyfluence - Instagram Profile Analytics & Scraper</title>
+    <title>Wittyfluence.ai</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,6 @@
         <!-- Header -->
         <header>
             <div class="logo">
-                <span class="logo-icon">✨</span>
                 <h1>Wittyfluence<span>.ai</span></h1>
             </div>
         </header>
@@ -31,8 +30,42 @@
         <section class="search-section">
             <div class="search-card">
                 <form id="search-form">
+                    <div class="select-wrapper" id="custom-select-wrapper">
+                        <div class="select-trigger" id="select-trigger">
+                            <span class="select-trigger-icon" id="trigger-icon">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="#E1306C">
+                                    <path
+                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                                </svg>
+                            </span>
+                            <span class="select-trigger-text" id="trigger-text">Instagram</span>
+                        </div>
+                        <div class="select-dropdown-options" id="select-options">
+                            <div class="select-dropdown-option selected" data-value="instagram">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="#E1306C">
+                                    <path
+                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                                </svg>
+                                <span>Instagram</span>
+                            </div>
+                            <div class="select-dropdown-option" data-value="youtube">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="#FF0000">
+                                    <path
+                                        d="M23.498 6.163a3.003 3.003 0 00-2.11-2.11C19.518 3.545 12 3.545 12 3.545s-7.518 0-9.388.508a3.003 3.003 0 00-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 002.11 2.11c1.87.508 9.388.508 9.388.508s7.518 0 9.388-.508a3.003 3.003 0 002.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                                </svg>
+                                <span>YouTube</span>
+                            </div>
+                            <div class="select-dropdown-option" data-value="twitter">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="#FFFFFF">
+                                    <path
+                                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                </svg>
+                                <span>X</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="input-wrapper">
-                        <span class="input-prefix">@</span>
+                        <span class="input-prefix" id="input-prefix-icon">@</span>
                         <input type="text" id="handle-input"
                             placeholder="Enter Instagram handle (e.g. nasa, taylorswift, techcrunch, leomessi...)"
                             required autocomplete="off">
@@ -42,13 +75,6 @@
                         <span class="btn-loader hidden"></span>
                     </button>
                 </form>
-                <div class="suggestions">
-                    <span>Popular:</span>
-                    <button type="button" class="tag-btn" data-handle="nasa">@nasa</button>
-                    <button type="button" class="tag-btn" data-handle="taylorswift">@taylorswift</button>
-                    <button type="button" class="tag-btn" data-handle="techcrunch">@techcrunch</button>
-                    <button type="button" class="tag-btn" data-handle="leomessi">@leomessi</button>
-                </div>
             </div>
         </section>
 
@@ -59,75 +85,42 @@
         <main id="dashboard" class="dashboard hidden">
             <!-- Profile Header Card -->
             <div class="profile-header-card glass">
-                <div class="profile-avatar-wrapper" style="display: none;">
+                <div class="profile-avatar-wrapper" id="profile-avatar-container" style="display: none;">
                 </div>
-                <div class="profile-meta">
-                    <div class="profile-title-row">
-                        <h2 id="profile-handle">@handle</h2>
-                        <span id="profile-source" class="source-badge">Live Data</span>
-                        <button type="button" id="adjust-stats-btn" class="visit-btn hidden"
-                            style="margin-left: 0.5rem; border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" style="margin-right: 3px;">
-                                <path
-                                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z" />
-                            </svg>
-                            Adjust Stats
-                        </button>
-                        <a id="profile-link" href="#" target="_blank" rel="noopener noreferrer" class="visit-btn">
-                            Visit Instagram
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path
-                                    d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
-                            </svg>
-                        </a>
-                    </div>
-                    <h3 id="profile-name">Full Name</h3>
-                    <p id="profile-bio">Biography text goes here.</p>
-                    <div class="topics-tags" id="profile-topics">
-                        <!-- Dynamic Topics -->
-                    </div>
-
-                    <div id="adjust-stats-panel" class="adjust-panel hidden"
-                        style="margin-top: 1.25rem; padding: 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; max-width: 400px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
-                        <h4
-                            style="font-size: 0.85rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 700;">
-                            Override Profile Metrics</h4>
-                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                            <div style="flex: 1;">
-                                <label
-                                    style="display: block; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.35rem; font-weight: 600;">Followers</label>
-                                <input type="text" id="adj-followers" placeholder="e.g. 15000"
-                                    style="width: 100%; padding: 0.5rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 0.9rem; font-family: var(--font-sans);">
-                            </div>
-                            <div style="flex: 1;">
-                                <label
-                                    style="display: block; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.35rem; font-weight: 600;">Following</label>
-                                <input type="text" id="adj-following" placeholder="e.g. 350"
-                                    style="width: 100%; padding: 0.5rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 0.9rem; font-family: var(--font-sans);">
-                            </div>
+                <div class="profile-details-wrapper">
+                    <div class="profile-meta">
+                        <div class="profile-title-row">
+                            <h2 id="profile-handle">@handle</h2>
+                            <span id="profile-source" class="source-badge">Live Data</span>
+                            <a id="profile-link" href="#" target="_blank" rel="noopener noreferrer" class="visit-btn">
+                                <span id="visit-btn-text">Visit Instagram</span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
+                                </svg>
+                            </a>
                         </div>
-                        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
-                            <button type="button" id="adj-cancel-btn"
-                                style="background: transparent; border: none; color: var(--text-secondary); padding: 0.4rem 0.8rem; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; font-family: var(--font-sans);">Cancel</button>
-                            <button type="button" id="adj-save-btn">Apply Changes</button>
+                        <h3 id="profile-name">Full Name</h3>
+                        <p id="profile-bio">Biography text goes here.</p>
+                        <div class="topics-tags" id="profile-topics">
+                            <!-- Dynamic Topics -->
                         </div>
                     </div>
-                </div>
 
-                <div class="profile-stats-inline">
-                    <div class="inline-stat">
-                        <div class="stat-label">Followers</div>
-                        <div class="stat-value" id="stat-followers">0</div>
-                        <div class="stat-indicator positive">Audience Size</div>
-                    </div>
-                    <div class="inline-stat">
-                        <div class="stat-label">Engagement Rate</div>
-                        <div class="stat-value" id="stat-er">0.0%</div>
-                        <div class="stat-indicator positive" id="er-context">Above Average</div>
-                        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.5rem;">Averaged over
-                            last 100 posts</div>
+                    <div class="profile-stats-inline">
+                        <div class="inline-stat">
+                            <div class="stat-label" id="followers-stat-label">Followers</div>
+                            <div class="stat-value" id="stat-followers">0</div>
+                            <div class="stat-indicator positive">Audience Size</div>
+                        </div>
+                        <div class="inline-stat">
+                            <div class="stat-label" id="stat-er-label">Engagement Rate</div>
+                            <div class="stat-value" id="stat-er">0.0%</div>
+                            <div class="stat-indicator positive" id="er-context">Above Average</div>
+                            <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.5rem;">Averaged over
+                                last 100 posts</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -136,53 +129,46 @@
             <div class="metrics-grid">
                 <!-- Post Metrics Card -->
                 <div class="metric-card glass">
-                    <h3>📷 Post Metrics (Images)</h3>
+                    <h3 id="media-card-title">📷 Post Metrics (Images)</h3>
                     <div class="metric-details">
                         <div class="m-detail-row">
-                            <span class="m-detail-label">Avg. Likes</span>
+                            <span class="m-detail-label" id="media-avg-likes-label">Avg. Likes</span>
                             <span class="m-detail-value" id="metric-post-likes">0</span>
                         </div>
-                        <div class="m-detail-row">
-                            <span class="m-detail-label">Avg. Comments</span>
+                        <div class="m-detail-row" id="media-comments-row">
+                            <span class="m-detail-label" id="media-avg-comments-label">Avg. Comments</span>
                             <span class="m-detail-value" id="metric-post-comments">0</span>
                         </div>
                         <div class="m-detail-row highlight">
-                            <span class="m-detail-label">Engagement Rate</span>
+                            <span class="m-detail-label" id="media-er-label">Engagement Rate</span>
                             <span class="m-detail-value" id="metric-post-er">0.0%</span>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Reel Metrics Card -->
                 <div class="metric-card glass">
-                    <h3>🎥 Reel Metrics (Videos)</h3>
+                    <h3 id="video-card-title">🎥 Reel Metrics (Videos)</h3>
                     <div class="metric-details">
                         <div class="m-detail-row">
-                            <span class="m-detail-label">Avg. Likes</span>
+                            <span class="m-detail-label" id="video-avg-likes-label">Avg. Likes</span>
                             <span class="m-detail-value" id="metric-reel-likes">0</span>
                         </div>
-                        <div class="m-detail-row">
-                            <span class="m-detail-label">Avg. Comments</span>
+                        <div class="m-detail-row" id="video-comments-row">
+                            <span class="m-detail-label" id="video-avg-comments-label">Avg. Comments</span>
                             <span class="m-detail-value" id="metric-reel-comments">0</span>
                         </div>
+                        <div class="m-detail-row" id="video-views-row">
+                            <span class="m-detail-label" id="video-avg-views-label">Avg. Views</span>
+                            <span class="m-detail-value" id="metric-reel-views">0</span>
+                        </div>
                         <div class="m-detail-row highlight">
-                            <span class="m-detail-label">Engagement Rate</span>
+                            <span class="m-detail-label" id="video-er-label">Engagement Rate</span>
                             <span class="m-detail-value" id="metric-reel-er">0.0%</span>
                         </div>
-                        <div class="m-detail-row accent-row">
-                            <span class="m-detail-label">Views to Followers</span>
+                        <div class="m-detail-row accent-row" id="video-ratio-row">
+                            <span class="m-detail-label" id="video-ratio-label">Views to Followers</span>
                             <span class="m-detail-value" id="metric-reel-views-ratio">0.0%</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Interaction & Ratio Card -->
-                <div class="metric-card glass">
-                    <h3>📊 Interaction Insights</h3>
-                    <div class="metric-details">
-                        <div class="m-detail-row">
-                            <span class="m-detail-label">Likes-to-Comments Ratio</span>
-                            <span class="m-detail-value" id="metric-likes-comments-ratio">0.0</span>
                         </div>
                     </div>
                 </div>
