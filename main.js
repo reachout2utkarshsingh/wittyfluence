@@ -162,7 +162,11 @@ document.addEventListener('DOMContentLoaded', () => {
             renderDashboard(data);
         } catch (err) {
             console.error(err);
-            showError(err.message || 'Server error. Make sure backend is running on port 8000.');
+            let errMsg = err.message || 'Server error. Make sure backend is running on port 8000.';
+            if (window.location.protocol === 'https:' && (err.name === 'TypeError' || err.message.includes('Failed to fetch') || err.message.includes('fetch'))) {
+                errMsg = 'Connection to local backend (http://localhost:8000) failed. Since this page is loaded over HTTPS, modern browsers block insecure HTTP requests to localhost (Mixed Content). To resolve this, run the app locally by visiting http://localhost:8000/ in your browser, or enable "Insecure content" in this site\'s browser settings.';
+            }
+            showError(errMsg);
         } finally {
             hideLoading();
         }
