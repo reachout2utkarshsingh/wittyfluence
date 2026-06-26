@@ -34,8 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
 
-    // API Base URL (FastAPI)
-    const API_BASE = 'http://localhost:8000/api';
+    // API Base URL (FastAPI) - dynamic based on local vs deployed environment
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const API_BASE = isLocal 
+        ? 'http://localhost:8000/api' 
+        : 'https://wittyfluence-api.onrender.com/api';
 
     const platformPlaceholders = {
         instagram: 'Enter Instagram handle or profile link (e.g. nasa, instagram.com/nasa)',
