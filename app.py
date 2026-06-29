@@ -1248,7 +1248,7 @@ def make_proxy_url(url: str) -> str:
         return ""
     if "imginn.com" in url or "cdninstagram.com" in url or "fbcdn.net" in url or "instagram" in url:
         import urllib.parse
-        return f"http://localhost:8000/api/proxy-image?url={urllib.parse.quote(url)}"
+        return f"/api/proxy-image?url={urllib.parse.quote(url)}"
     return url
 
 @app.get("/api/proxy-image")

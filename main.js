@@ -35,10 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // API Base URL (FastAPI) - dynamic based on local vs deployed environment
-    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const API_BASE = isLocal 
-        ? 'http://localhost:8000/api' 
-        : 'https://wittyfluence-api.onrender.com/api';
+    const API_BASE = (window.location.origin === 'null' || window.location.protocol === 'file:')
+        ? 'http://localhost:8000/api'
+        : `${window.location.origin}/api`;
 
     const platformPlaceholders = {
         instagram: 'Enter Instagram handle or profile link (e.g. nasa, instagram.com/nasa)',
@@ -251,7 +250,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Profile Header
         const avatarContainer = document.getElementById('profile-avatar-container');
         if (data.profile_pic_url) {
-            avatarContainer.innerHTML = `<img src="${data.profile_pic_url}" alt="${data.full_name}'s avatar">`;
+            let picUrl = data.profile_pic_url;
+            if (picUrl.startsWith('/')) {
+                const apiOrigin = API_BASE.endsWith('/api') ? API_BASE.slice(0, -4) : API_BASE;
+                picUrl = `${apiOrigin}${picUrl}`;
+            }
+            avatarContainer.innerHTML = `<img src="${picUrl}" alt="${data.full_name}'s avatar">`;
             avatarContainer.style.display = 'block';
         } else {
             avatarContainer.style.display = 'none';
